@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Page</title>
+  <link rel="stylesheet" href="/css/payment.css">
+</head>
+
+<body>
+  <div class="container">
+    <h2>Services Chosen</h2>
+    <ul>
+      <% services.forEach(service=> { %>
+        <li>
+          <span>
+            <%= service.name %>
+          </span>
+          <span>₹<%= service.price %></span>
+        </li>
+        <% }) %>
+    </ul>
+
+    <div class="total">
+      <span>Total Price</span>
+      <span>₹<%= totalPrice %></span>
+    </div>
+
+    <!-- Pay button now shows total price -->
+    <button class="pay-btn" id="pay">Pay ₹<%= totalPrice %></button>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    // Ask server if user session is valid
+    socket.emit("checkLogin");
+
+    // If not logged in → redirect
+    socket.on("redirect", (url) => {
+      window.location.href = url;
+    });
+
+    // ✅ Trigger backend order creation
+    document.getElementById("pay").addEventListener("click", async () => {
+      const btn = document.getElementById("pay");
+      btn.disabled = true;
+      btn.innerText = "Processing...";
+
+      try {
+        const res = await fetch("/create-order", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" }
+        });
+
+        const data = await res.json();
+
+        if (data.url) {
+          window.location.href = data.url; // ✅ Redirect to PhonePe portal
+        } else {
+          alert("Failed to initiate payment");
+          btn.disabled = false;
+          btn.innerText = "Pay ₹<%= totalPrice %>";
+        }
+      } catch (err) {
+        console.error("Error:", err);
+        alert("Something went wrong");
+        btn.disabled = false;
+        btn.innerText = "Pay ₹<%= totalPrice %>";
+      }
+    });
+
+  </script>
+</body>
+
+</html>

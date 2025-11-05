@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - TurboCare</title>
+    <link rel="stylesheet" href="/css/profile_detail.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <p class="logo">Turbo<span>Care</span></p>
+    </nav>
+
+    <div class="profile-container">
+        <!-- User Profile Card -->
+        <div class="profile-card">
+            <img src="<%= user.profile_image || '/default-avatar.png' %>" alt="Profile Photo">
+            <h2>
+                <%= user.name %>
+            </h2>
+            <p><strong>Email:</strong>
+                <%= user.email %>
+            </p>
+            <p><strong>Phone:</strong>
+                <%= user.phone %>
+            </p>
+            <p><strong>Address:</strong>
+                <%= user.address || 'N/A' %>
+            </p>
+        </div>
+
+        <!-- Booking History -->
+        <div class="bookings-container">
+            <h2>Booking History</h2>
+
+            <% if (bookings.length===0) { %>
+                <p>No bookings found.</p>
+                <% } else { %>
+                    <% bookings.forEach(b=> { %>
+                        <div class="booking-card">
+                            <h3>Booking <%= b.booking_number %>
+                            </h3>
+                            <p><strong>Car:</strong>
+                                <%= b.car_name %> (<%= b.year %>)
+                            </p>
+                            <p><strong>Vehicle No:</strong>
+                                <%= b.vehicle_number %>
+                            </p>
+                            <p><strong>Date:</strong>
+                                <%= b.booking_date.toISOString().slice(0,10) %>
+                            </p>
+
+                            <!-- Status update -->
+                            <form class="status-form" data-booking-id="<%= b.booking_id %>">
+                                <label><strong>Status:</strong></label>
+                                <select name="status">
+                                    <option value="pending" <%=b.status==='pending' ? 'selected' : '' %>>Pending
+                                    </option>
+                                    <option value="in-progress" <%=b.status==='in-progress' ? 'selected' : '' %>>In
+                                        Progress</option>
+                                    <option value="completed" <%=b.status==='completed' ? 'selected' : '' %>>Completed
+                                    </option>
+                                    <option value="cancelled" <%=b.status==='cancelled' ? 'selected' : '' %>>Cancelled
+                                    </option>
+                                </select>
+                                <button type="submit">Update</button>
+                            </form>
+
+                            <p><strong>Pickup/Drop:</strong>
+                                <%= b.pickup_drop ? 'Yes' : 'No' %>
+                            </p>
+                            <p><strong>Notes:</strong>
+                                <%= b.extra_notes || 'N/A' %>
+                            </p>
+
+                            <!-- Media Gallery -->
+                            <% if (b.media) { %>
+                                <div class="media-gallery">
+                                    <% if (b.media.exterior?.length) { %>
+                                        <h4>Exterior</h4>
+                                        <% b.media.exterior.forEach(img=> { %>
+                                            <img src="<%= img %>" alt="Exterior photo">
+                                            <% }) %>
+                                                <% } %>
+
+                                                    <% if (b.media.engine?.length) { %>
+                                                        <h4>Engine</h4>
+                                                        <% b.media.engine.forEach(img=> { %>
+                                                            <img src="<%= img %>" alt="Engine photo">
+                                                            <% }) %>
+                                                                <% } %>
+
+                                                                    <% if (b.media.tire?.length) { %>
+                                                                        <h4>Tires</h4>
+                                                                        <% b.media.tire.forEach(img=> { %>
+                                                                            <img src="<%= img %>" alt="Tire photo">
+                                                                            <% }) %>
+                                                                                <% } %>
+
+                                                                                    <% if (b.media.brake?.length) { %>
+                                                                                        <h4>Brakes</h4>
+                                                                                        <% b.media.brake.forEach(img=> {
+                                                                                            %>
+                                                                                            <img src="<%= img %>"
+                                                                                                alt="Brake photo">
+                                                                                            <% }) %>
+                                                                                                <% } %>
+
+                                                                                                    <% if
+                                                                                                        (b.media.interior?.length)
+                                                                                                        { %>
+                                                                                                        <h4>Interior
+                                                                                                        </h4>
+                                                                                                        <%
+                                                                                                            b.media.interior.forEach(img=>
+                                                                                                            { %>
+                                                                                                            <img src="<%= img %>"
+                                                                                                                alt="Interior photo">
+                                                                                                            <% }) %>
+                                                                                                                <% } %>
+
+                                                                                                                    <% if
+                                                                                                                        (b.media.underbody?.length)
+                                                                                                                        {
+                                                                                                                        %>
+                                                                                                                        <h4>Underbody
+                                                                                                                        </h4>
+                                                                                                                        <%
+                                                                                                                            b.media.underbody.forEach(img=>
+                                                                                                                            {
+                                                                                                                            %>
+                                                                                                                            <img src="<%= img %>"
+                                                                                                                                alt="Underbody photo">
+                                                                                                                            <% })
+                                                                                                                                %>
+                                                                                                                                <% }
+                                                                                                                                    %>
+
+                                                                                                                                    <% if
+                                                                                                                                        (b.media.video)
+                                                                                                                                        {
+                                                                                                                                        %>
+                                                                                                                                        <h4>Problem
+                                                                                                                                            Video
+                                                                                                                                        </h4>
+                                                                                                                                        <video
+                                                                                                                                            controls>
+                                                                                                                                            <source
+                                                                                                                                                src="<%= b.media.video %>"
+                                                                                                                                                type="video/mp4">
+                                                                                                                                        </video>
+                                                                                                                                        <% }
+                                                                                                                                            %>
+                                </div>
+                                <% } %>
+
+                                    <!-- Recommendation Form for this booking -->
+                                    <div class="recommend-container">
+                                        <h4>Recommend Services</h4>
+                                        <form action="/recommend_service" method="POST">
+                                            <input type="hidden" name="user_id" value="<%= user.user_id %>">
+                                            <input type="hidden" name="booking_id" value="<%= b.booking_id %>">
+                                            <% services.forEach(s=> { %>
+                                                <div>
+                                                    <input type="checkbox" name="service_ids[]"
+                                                        value="<%= s.service_id %>">
+                                                    <label>
+                                                        <%= s.name %> - ₹<%= s.price %>
+                                                    </label>
+                                                </div>
+                                                <% }) %>
+                                                    <button type="submit">Recommend</button>
+                                        </form>
+                                    </div>
+                        </div>
+                        <% }) %>
+                            <% } %>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        document.querySelectorAll(".status-form").forEach(form => {
+            form.addEventListener("submit", async (e) => {
+                e.preventDefault();
+
+                const bookingId = form.dataset.bookingId;
+                const status = form.querySelector("select").value;
+
+                const res = await fetch(`/update_status/${bookingId}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ status })
+                });
+
+                if (res.ok) {
+                    socket.emit("statusUpdated", { bookingId, status });
+                    alert("✅ Status updated!");
+                } else {
+                    alert("❌ Failed to update status");
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/landing.css">
+  <title>TurboCare</title>
+</head>
+
+<body>
+  <nav>
+    <p class="website-name"><span>Turbo</span>
+      <fill>Care</fill>
+    </p>
+    <div class="nav-buttons">
+
+      <% if (!session.user_id) { %>
+        <!-- If not logged in -->
+        <div class="dropdown">
+          <button class="dropbtn">Login ▾</button>
+          <div class="dropdown-content">
+            <a href="/admin_login">Admin Login</a>
+            <a href="/login">User Login</a>
+          </div>
+        </div>
+        <button onclick="window.location.href='/register'">Sign up</button>
+        <% } else { %>
+          <!-- If logged in -->
+          <button onclick="window.location.href='/user_profile'">My Profile</button>
+          <button onclick="window.location.href='/book_service'">Booking Service</button>
+          <button onclick="window.location.href='/view_booking'">My Bookings</button>
+          <button onclick="logout()">Logout</button>
+          <% } %>
+
+    </div>
+  </nav>
+
+  <section>
+    <p class="welcome">Welcome to Turbo<fill>Care</fill>
+    </p>
+    <p class="slogan">"Driven by Quality, Powered by Trust."</p>
+    <p class="paragraph">We're your trusted partner in keeping your 4-wheeler running smooth, safe, and reliable.
+      From routine maintenance to expert repairs, our skilled mechanics ensure your vehicle gets the care it deserves.
+    </p>
+    <button id="book-service" onclick='goToBooking("book_service")'>Book Service</button>
+  </section>
+  <div class="line"></div>
+  <div class="choose-us" id="choose-us">
+    <div class="question-para">
+      <div class="heading">Why Choose Us?</div>
+      <div class="para">We provide expert care for your car with skilled mechanics and modern tools.
+        Our commitment is quick, reliable, and affordable service every time.
+        Customer satisfaction and trust drive everything we do.</div>
+      <button id="our-services" onclick="document.getElementById('services').scrollIntoView({behavior: 'smooth'});">Our
+        Services</button>
+    </div>
+    <div class="image-shaking-hands">
+      <img src="/photoes/Shaking-Hands.avif" alt="Shaking-Hands">
+    </div>
+  </div>
+  <div class="line"></div>
+  <div class="services" id="services">
+    <h1 class="services-heading">Our Services</h1>
+    <div class="services-grid">
+      <div class="one">
+        <div class="service-card">
+          <img src="photoes/car-battery.png" alt="Battery">
+          <p class="service-title">Battery</p>
+        </div>
+        <div class="service-card">
+          <img src="photoes/car-engine.png" alt="Engine">
+          <p class="service-title">Engine Repair</p>
+        </div>
+        <div class="service-card">
+          <img src="photoes/repair-tools.png" alt="Servicing">
+          <p class="service-title">Servicing</p>
+        </div>
+      </div>
+      <div class="two">
+        <div class="service-card">
+          <img src="photoes/water-rinse.png" alt="Car Wash">
+          <p class="service-title">Car Wash</p>
+        </div>
+        <div class="service-card">
+          <img src="photoes/wheel.png" alt="Tyre">
+          <p class="service-title">Tyres</p>
+        </div>
+        <div class="service-card">
+          <img src="photoes/car.png" alt="Modification">
+          <p class="service-title">Modification</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <h1 class="review-heading">Reviews</h1>
+  <div class="review">
+    <% reviews.forEach(review=> { %>
+      <div class="review-card">
+        <img src="<%= review.img %>" alt="User">
+        <p><strong>
+            <%= review.name %>
+          </strong></p>
+        <p>"<%= review.text %>"</p>
+        <p class="stars">
+          <%= review.stars %>
+        </p>
+      </div>
+      <% }) %>
+  </div>
+
+  <div class="line"></div>
+  <footer class="footer">
+    <div class="footer-container">
+
+      <div class="footer-about">
+        <h2 class="footer-logo">Turbo<span>Care</span></h2>
+        <p>Reliable 4-wheeler service with expert care. We keep your car running smoothly and safely.</p>
+      </div>
+
+      <div class="footer-links">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#choose-us">About Us</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-contact">
+        <h3>Contact Us</h3>
+        <p>Email: turbocare@gmail.com</p>
+        <p>Phone: +91 98765 43210</p>
+        <p>Address: Pune, India</p>
+
+      </div>
+
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 TurboCare. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/js/landing.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io("http://localhost:3000"); // adjust if needed
+
+    function goToBooking(check) {
+
+      console.log(check);
+      socket.emit("checkLogin", check);
+      socket.on("redirect", (url) => {
+        window.location.href = url;
+      })
+    }
+
+    function logout() {
+      fetch("/logout", { method: "POST" })
+        .then(() => {
+          window.location.href = "/";
+        })
+        .catch(err => console.error("Logout error:", err));
+    }
+
+  </script>
+</body>
+
+</html>

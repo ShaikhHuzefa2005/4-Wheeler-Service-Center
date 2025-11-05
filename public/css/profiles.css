@@ -1,0 +1,145 @@
+/* General Reset */
+body {
+    margin: 0;
+    background: #000;
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Navbar */
+nav {
+    background: #111;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.website-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.website-name span {
+    color: #FCA311;
+}
+
+/* Nav Links */
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.nav-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #FCA311;
+}
+
+/* Logout Button */
+.login {
+    background: #FCA311;
+    color: #111;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.login:hover {
+    background: #e59400;
+}
+
+/* Search Bar */
+.search-bar {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.search-bar input {
+    width: 60%;
+    padding: 12px;
+    border-radius: 25px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    background: #111;
+    color: #fff;
+    border: 2px solid #FCA311;
+    transition: 0.3s;
+}
+
+.search-bar input:focus {
+    border-color: #fff;
+}
+
+/* Profiles Container */
+.profiles-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    scroll-snap-type: y mandatory;
+    overflow-y: auto;
+    height: 100vh;
+    padding: 20px 0;
+}
+
+/* Profile Card */
+.profile-card {
+    background: #111;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 20px;
+    width: 350px;
+    text-align: center;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    scroll-snap-align: center;
+}
+
+.profile-card:hover {
+    border-color: #FCA311;
+    transform: scale(1.05);
+    box-shadow: 0px 8px 25px rgba(252, 163, 17, 0.4);
+}
+
+.profile-card img {
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border: 3px solid #fff;
+    margin-bottom: 15px;
+    transition: 0.3s;
+}
+
+.profile-card:hover img {
+    border-color: #FCA311;
+}
+
+.profile-card h2 {
+    margin: 10px 0;
+    color: #FCA311;
+}
+
+.profile-card p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #ddd;
+}
+
+/* Smooth scroll */
+html {
+    scroll-behavior: smooth;
+}

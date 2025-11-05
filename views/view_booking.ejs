@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings - TurboCare</title>
+    <link rel="stylesheet" href="/css/view_booking.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav>
+        <p class="website-name"><span>Turbo</span>
+            <fill>Care</fill>
+        </p>
+        <div class="nav-buttons">
+            <button onclick="window.location.href='/'">Home</button>
+            <button onclick="window.location.href='/book_service'">Book Service</button>
+            <button onclick="window.location.href='/user_profile'">Profile</button>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <!-- Bookings Section -->
+    <div class="container">
+        <h1>My Bookings</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Service ID</th>
+                    <th>Car Model</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Payment</th>
+                    <th>Pay</th>
+                    <th>Receipt</th> <!-- ✅ New Column -->
+                </tr>
+            </thead>
+            <tbody>
+                <% if (bookings.length===0) { %>
+                    <tr>
+                        <td colspan="7" style="text-align:center;">No bookings found</td>
+                    </tr>
+                    <% } else { %>
+                        <% bookings.forEach(b=> { %>
+                            <tr>
+                                <td>
+                                    <%= b.booking_id %>
+                                </td>
+                                <td>
+                                    <%= b.car_name %>
+                                </td>
+                                <td>
+                                    <%= new Date(b.booking_date).toLocaleDateString() %>
+                                </td>
+                                <td id="status-<%= b.booking_id %>">
+                                    <%= b.status %>
+                                </td>
+                                <td>
+                                    <%= b.payment_status || "pending" %>
+                                </td>
+                                <td>
+                                    <% if (b.has_recommendations && b.payment_status !=="paid" ) { %>
+                                        <a href="/payment/<%= b.booking_id %>" class="btn btn-sm btn-success">Pay</a>
+                                        <% } else if (b.payment_status !=="paid" ) { %>
+                                            <span class="text-muted">Unavailable</span>
+                                            <% } else { %>
+                                                <span class="text-muted">Paid</span>
+                                                <% } %>
+                                </td>
+                                <td>
+                                    <% if (b.payment_status==="paid" ) { %>
+                                        <a href="/receipt/<%= b.booking_id %>/download"
+                                            class="btn btn-sm btn-primary">Download</a>
+                                        <% } else { %>
+                                            <span class="text-muted">Not Available</span>
+                                            <% } %>
+                                </td>
+                                <td>
+                                    <% if (b.lat && b.lng) { %>
+                                        <button class="btn btn-sm btn-warning"
+                                            onclick="trackBooking('<%= b.lat %>', '<%= b.lng %>')">Track</button>
+                                        <% } else { %>
+                                            <span class="text-muted">No Location</span>
+                                            <% } %>
+                                </td>
+
+                            </tr>
+                            <% }) %>
+                                <% } %>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        function trackBooking(destLat, destLng) {
+            // Convert back to numbers
+            destLat = parseFloat(destLat);
+            destLng = parseFloat(destLng);
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((pos) => {
+                    const userLat = pos.coords.latitude;
+                    const userLng = pos.coords.longitude;
+
+                    // Open Google Maps with directions
+                    const mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLng}&destination=${destLat},${destLng}`;
+                    window.open(mapsUrl, "_blank");
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+
+        const socket = io();
+
+        socket.on("statusUpdated", ({ bookingId, status }) => {
+            const el = document.getElementById(`status-${bookingId}`);
+            if (el) {
+                el.textContent = status;
+            }
+        });
+
+        function logout() {
+            fetch('/logout', { method: 'POST' })
+                .then(() => window.location.href = '/');
+        }
+
+        // Ask server if user session is valid
+        socket.emit("checkLogin");
+
+        // If not logged in → redirect
+        socket.on("redirect", (url) => {
+            window.location.href = url;
+        });
+
+    </script>
+
+</body>
+
+</html>

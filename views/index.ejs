@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Maharashtra Cities</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #fffdf2;
+            /* soft creamy background */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 0;
+        }
+
+        h1 {
+            margin-bottom: 25px;
+            color: #2a2a2a;
+            font-weight: 700;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-auto-rows: 120px;
+            gap: 18px;
+            background-color: #fffbea;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 1150px;
+        }
+
+        .city {
+            padding: 12px;
+            text-align: center;
+            border-radius: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            color: #2a2a2a;
+            font-size: 18px;
+            text-decoration: none;
+        }
+
+        .city:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        /* lighter yellow shades */
+        .shade1 {
+            background-color: #fffde7;
+        }
+
+        .shade2 {
+            background-color: #fff9c4;
+        }
+
+        .shade3 {
+            background-color: #fff59d;
+        }
+
+        .shade4 {
+            background-color: #fff176;
+        }
+
+        .shade5 {
+            background-color: #ffee58;
+        }
+    </style>
+
+</head>
+
+<body>
+    <h1 style="text-align:center;">Select a City</h1>
+    <div class="grid">
+        <% cities.forEach(city=> { %>
+            <a href="/city/<%= city %>" class="city">
+                <%= city %>
+            </a>
+            <% }) %>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        // Ask server if user session is valid
+        socket.emit("checkLogin");
+
+        // If not logged in → redirect
+        socket.on("redirect", (url) => {
+            window.location.href = url;
+        });
+    </script>
+
+</body>
+
+</html>

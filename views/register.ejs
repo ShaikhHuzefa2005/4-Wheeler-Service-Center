@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/register.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="login-container">
+        <p>Register</p>
+
+        <form id="loginForm" action="/register" method="post" enctype="multipart/form-data">
+            <div class="input-group">
+                <label for="profile_image">Profile Image</label>
+                <div class="file-wrapper">
+                    <input type="file" id="profile_image" name="profile_image" accept="image/*" hidden>
+                    <label for="profile_image" class="file-label">Choose</label>
+                    <span id="file-chosen">No file chosen</span>
+                </div>
+            </div>
+            <div class="input-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="input-group">
+                <label for="number">Phone Number</label>
+                <input type="tel" id="phone" name="phone" required maxlength="10" pattern="[0-9]{10}" inputmode="numeric" title="Phone number must be 10 digits">
+
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <div class="input-group">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+            </div>
+            <div class="input-group">
+                <label for="address">Address</label>
+                <textarea name="address" id="address"></textarea>
+
+            </div>
+            <button type="submit" class="login-button" id="login-button">Submit</button>
+            <hr>
+            <div class="login-link">
+                Already have an account? <a href="/login">Log in</a>
+            </div>
+        </form>
+
+
+    </div>
+
+    <script src="/js/register.js"></script>
+</body>
+
+</html>

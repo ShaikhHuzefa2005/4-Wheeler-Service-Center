@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+        <%= city %> Locations
+    </title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #fffdf2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            background-color: #fffbea;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            width: 95%;
+            max-width: 1200px;
+            height: 500px;
+        }
+
+        .row {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .city-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .city {
+            padding: 10px;
+            text-align: center;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+            color: #2a2a2a;
+            font-size: 15px;
+            background-color: #fff9c4;
+        }
+
+        .city:hover {
+            background-color: #ffecb3;
+            transform: translateY(-2px);
+        }
+
+        .map-frame {
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+        }
+
+        .save-btn {
+            margin-top: 5px;
+            padding: 8px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+            width: 100%;
+        }
+
+        .save-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="grid-container">
+        <div class="row">
+            <div class="city-list">
+                <% locations.forEach(loc=> { %>
+                    <div>
+                        <div class="city" data-name="<%= loc.name %>" data-lat="<%= loc.lat %>"
+                            data-lng="<%= loc.lng %>">
+                            <%= loc.name %>
+                        </div>
+                        <button class="save-btn" data-id="<%= loc.id %>" data-lat="<%= loc.lat %>"
+                            data-lng="<%= loc.lng %>" data-name="<%= loc.name %>">Save Location</button>
+                    </div>
+                    <% }) %>
+            </div>
+        </div>
+        <div id="map" class="map-frame" data-locations='<%- JSON.stringify(locations) %>'></div>
+    </div>
+
+    <script src="/js/session_check.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        // Ask server if user session is valid
+        socket.emit("checkLogin");
+
+        // If not logged in → redirect
+        socket.on("redirect", (url) => {
+            window.location.href = url;
+        });
+
+        const locations = JSON.parse(document.getElementById("map").dataset.locations);
+
+        // Initialize map
+        var map = L.map('map').setView([19.0760, 72.8777], 12);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        var marker;
+
+        // Function to show selected location
+        function showLocation(name, lat, lng) {
+            if (marker) {
+                map.removeLayer(marker);
+            }
+            marker = L.marker([lat, lng]).addTo(map)
+                .bindPopup(`<b>${name}</b>`)
+                .openPopup();
+            map.setView([lat, lng], 15);
+        }
+
+        // Add all markers initially
+        locations.forEach(loc => {
+            L.marker([loc.lat, loc.lng])
+                .addTo(map)
+                .bindPopup(`<b>${loc.name}</b>`);
+        });
+
+        // Attach click events for list
+        document.querySelectorAll('.city').forEach(el => {
+            el.addEventListener('click', () => {
+                const name = el.dataset.name;
+                const lat = parseFloat(el.dataset.lat);
+                const lng = parseFloat(el.dataset.lng);
+                showLocation(name, lat, lng);
+            });
+        });
+
+        // Attach click events for save buttons
+        document.querySelectorAll('.save-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const locationId = btn.dataset.id;
+                const lat = parseFloat(btn.dataset.lat);
+                const lng = parseFloat(btn.dataset.lng);
+                const name = btn.dataset.name;
+
+                try {
+                    const response = await fetch('/save-location', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ location_id: locationId, lat: lat, lng: lng, name: name })
+                    });
+                    const result = await response.json();
+                    alert(result.message);
+                    if (response.ok) {
+                        window.location.href = '/book_service';
+                    }
+                } catch (err) {
+                    alert('Error saving location');
+                    console.error('Error:', err);
+                }
+            });
+        });
+
+        // Default view (first location if exists)
+        if (locations.length > 0) {
+            showLocation(locations[0].name, locations[0].lat, locations[0].lng);
+        }
+    </script>
+</body>
+
+</html>

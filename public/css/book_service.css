@@ -1,0 +1,215 @@
+/* ---------------- NAVBAR ---------------- */
+nav {
+    background-color: #000;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 30px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.website-name {
+    font-size: 32px;
+    font-weight: bold;
+    color: #8b8c89;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.website-name span {
+    color: #E5E5E5;
+}
+
+fill {
+    color: #FCA311;
+}
+
+.nav-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.nav-buttons button {
+    margin: 0 8px;
+    padding: 10px 15px;
+    font-size: 15px;
+    border-radius: 10px;
+    border: none;
+    background-color: #000;
+    color: #FCA311;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.nav-buttons button:hover {
+    background-color: #FCA311;
+    color: #fff;
+    transform: scale(1.05);
+}
+
+/* ---------------- BODY ---------------- */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    color: #222;
+}
+
+/* ---------------- FORM CONTAINER ---------------- */
+.form-container {
+    max-width: 850px;
+    margin: 60px auto;
+    padding: 35px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+.form-container h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #FCA311;
+    font-size: 28px;
+}
+
+.form-container h2 {
+    margin-top: 35px;
+    color: #FCA311;
+    font-size: 20px;
+    border-bottom: 2px solid #FCA311;
+    padding-bottom: 5px;
+}
+
+.form-container h3 {
+    margin-top: 18px;
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+/* ---------------- FORM FIELDS ---------------- */
+.form-container label {
+    display: block;
+    margin: 10px 0 6px;
+    font-weight: bold;
+    color: #333;
+    font-size: 15px;
+}
+
+.form-container input,
+.form-container select,
+.form-container textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-bottom: 18px;
+    font-size: 15px;
+    transition: 0.2s;
+}
+
+.form-container input:focus,
+.form-container select:focus,
+.form-container textarea:focus {
+    border-color: #FCA311;
+    outline: none;
+    box-shadow: 0 0 4px rgba(252, 163, 17, 0.6);
+}
+
+/* ---------------- PICKUP & DROP + LOCATION BUTTON ---------------- */
+.pickup-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+#select_location_btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: #000;
+    color: #FCA311;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#select_location_btn:hover {
+    background-color: #FCA311;
+    color: #fff;
+    transform: scale(1.05);
+}
+
+/* ---------------- SELECTED LOCATION BOX ---------------- */
+#selected-location {
+    margin-top: 10px;
+    padding: 12px;
+    background-color: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+#selected-location label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+#selected-location p {
+    margin: 0;
+    color: #444;
+    font-size: 14px;
+}
+
+/* ---------------- FILE UPLOAD ---------------- */
+.upload-btn,
+.form-container input[type="file"] {
+    margin: 8px 0 18px;
+    display: block;
+    padding: 8px;
+    border: 1px dashed #aaa;
+    background: #fafafa;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.form-container input[type="file"]:hover {
+    border-color: #FCA311;
+    background: #fff6e5;
+}
+
+/* ---------------- INSTRUCTIONS ---------------- */
+.instructions {
+    background: #fff8e1;
+    padding: 14px 16px;
+    border-left: 5px solid #FCA311;
+    margin: 20px 0;
+    font-size: 14px;
+    color: #444;
+    border-radius: 6px;
+}
+
+/* ---------------- SUBMIT BUTTON ---------------- */
+.form-container button[type="submit"] {
+    width: 100%;
+    padding: 14px;
+    background: #FCA311;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 10px;
+}
+
+.form-container button[type="submit"]:hover {
+    background: #e69500;
+    transform: scale(1.03);
+}

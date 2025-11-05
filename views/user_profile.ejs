@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile - TurboCare</title>
+  <link rel="stylesheet" href="/css/user_profile.css">
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav>
+    <p class="website-name">
+      <span>Turbo</span><span class="highlight">Care</span>
+    </p>
+
+    </p>
+    <div class="nav-buttons">
+      <button onclick="window.location.href='/'">Home</button>
+      <button onclick="window.location.href='/book_service'">Book Service</button>
+      <button onclick="window.location.href='/view_booking'">My Bookings</button>
+      <button onclick="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <!-- Profile Section -->
+  <div class="profile-container">
+    <div class="profile-card">
+      <img src="<%= user.profile_image || '/default-avatar.png' %>" alt="Profile Photo">
+      <h2>
+        <%= user.name %>
+      </h2>
+      <p><strong>Email:</strong>
+        <%= user.email %>
+      </p>
+      <p><strong>Phone:</strong>
+        <%= user.phone %>
+      </p>
+      <p><strong>Address:</strong>
+        <%= user.address %>
+      </p>
+
+      <!-- Edit Button -->
+      <button id="edit-btn">Edit</button>
+    </div>
+
+    <!-- Hidden Edit Form -->
+    <div class="edit-card" id="edit-card" style="display: none;">
+      <h3>Edit Profile</h3>
+      <form action="/user_profile/update" method="POST" enctype="multipart/form-data">
+        <label>Name:</label>
+        <input type="text" name="name" value="<%= user.name %>" required>
+
+        <label>Email:</label>
+        <input type="email" name="email" value="<%= user.email %>" required>
+
+        <label>Phone:</label>
+        <input type="text" name="phone" value="<%= user.phone %>" maxlength="10" required>
+
+        <label>Address:</label>
+        <textarea name="address" required><%= user.address %></textarea>
+
+        <label>Profile Image:</label>
+        <input type="file" name="profile_image">
+
+        <button type="submit">Save Changes</button>
+        <button type="button" id="cancel-btn">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    function logout() {
+      fetch('/logout', { method: 'POST' })
+        .then(() => window.location.href = '/');
+    }
+
+    document.getElementById("edit-btn").addEventListener("click", () => {
+      document.getElementById("edit-card").style.display = "block";
+    });
+
+    document.getElementById("cancel-btn").addEventListener("click", () => {
+      document.getElementById("edit-card").style.display = "none";
+    });
+
+    const socket = io();
+
+    // Ask server if user session is valid
+    socket.emit("checkLogin");
+
+    // If not logged in → redirect
+    socket.on("redirect", (url) => {
+      window.location.href = url;
+    });
+  </script>
+</body>
+
+</html>

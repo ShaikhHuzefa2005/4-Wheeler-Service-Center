@@ -1,0 +1,84 @@
+body{
+    margin: 0px;
+    border: 0px;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000000;
+    color: #000000;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.login-container{
+    background-color: #FFFFFF;
+    padding: 30px;
+    text-align: left;
+    border-radius: 10px;
+    transition-duration: 0.5s;
+    
+}
+.login-container:hover{
+    box-shadow: 10px 10px 0px gray;
+    transition-duration: 0.5s;
+    transform: translateY(-10px);
+}
+input,button{
+    padding: 10px 15px 10px 15px ;
+    margin: 5px;
+}
+input{
+    border-color: #000000;
+    border: 1px solid #000000;
+    border-radius: 30px;
+}
+input:hover{
+    border-color: #FCA311;
+
+}
+.input-group{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+label,a,.divider{
+    margin-left: 5px;
+}
+p{
+    text-align: center;
+    font-size: 45px;
+    margin: 10px 0px 20px 0px;
+    color: #FCA311;
+}
+a{
+    text-decoration: none;
+    color: #000000;
+}
+a:hover{
+    text-decoration: underline;
+}
+.divider{
+    align-items: center;
+    display: flex;
+    text-align: center;
+    margin: 20px 0;
+}
+.divider::before,.divider::after{
+    content: "";
+    flex:1;
+    border-bottom: 1px solid #E5E5E5;
+    margin:0 10px;
+}
+button{
+    margin: 20px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 105px 10px 105px;
+    font-size: 15px;
+    border-radius: 30px;
+    border: none;
+    background-color: #FCA311;
+}
+button:hover{
+    background-color:#E59400 ;
+}

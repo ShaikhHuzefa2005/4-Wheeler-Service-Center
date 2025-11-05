@@ -1,0 +1,220 @@
+/* General Reset */
+body {
+    margin: 0;
+    background: #000;
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Navbar */
+nav {
+    background: #000;
+    display: flex;
+    justify-content: space-between;
+    /* keeps logo left, buttons right */
+    align-items: center;
+    padding: 12px 40px;
+    /* match landing page spacing */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.website-name {
+    font-size: 32px;
+    font-weight: bold;
+    color: #8b8c89;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.website-name span {
+    color: #E5E5E5;
+}
+
+fill {
+    color: #FCA311;
+}
+
+.nav-buttons {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    /* more space between items */
+}
+
+.nav-buttons button {
+    background: #000;
+    border: none;
+    font-size: 16px;
+    font-weight: 500;
+    color: #FCA311;
+    cursor: pointer;
+    padding: 10px 15px;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+.nav-buttons button:hover {
+    background-color: #FCA311;
+    color: #fff;
+    transform: scale(1.05);
+}
+
+/* Profile Section */
+.profile-container {
+    display: flex;
+    justify-content: center;
+    margin: 60px auto;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+/* Profile Card */
+.profile-card {
+    background: #111;
+    padding: 30px;
+    border-radius: 20px;
+    border: 2px solid transparent;
+    width: 320px;
+    text-align: center;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
+    transition: 0.3s ease;
+}
+
+.profile-card:hover {
+    border-color: #FCA311;
+    box-shadow: 0px 8px 25px rgba(252, 163, 17, 0.4);
+    transform: translateY(-5px);
+}
+
+.profile-card img {
+    border-radius: 50%;
+    border: 3px solid #fff;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    margin-bottom: 20px;
+    transition: 0.3s;
+}
+
+.profile-card:hover img {
+    border-color: #FCA311;
+}
+
+.profile-card h2 {
+    margin-bottom: 10px;
+    color: #FCA311;
+}
+
+.profile-card p {
+    margin: 6px 0;
+}
+
+#edit-btn {
+    margin-top: 15px;
+    padding: 10px 18px;
+    font-size: 15px;
+    border: none;
+    border-radius: 10px;
+    background: #FCA311;
+    color: #000;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#edit-btn:hover {
+    background: #e69500;
+    color: #fff;
+    transform: scale(1.1);
+}
+
+/* Edit Card (Form) */
+.edit-card {
+    background: #111;
+    padding: 25px;
+    border-radius: 20px;
+    border: 2px solid transparent;
+    width: 380px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
+    transition: 0.3s ease;
+}
+
+.edit-card:hover {
+    border-color: #FCA311;
+    box-shadow: 0px 8px 25px rgba(252, 163, 17, 0.4);
+}
+
+.edit-card h3 {
+    color: #FCA311;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.edit-card form {
+    display: flex;
+    flex-direction: column;
+}
+
+.edit-card label {
+    margin: 8px 0 4px;
+    font-weight: bold;
+}
+
+.edit-card input,
+.edit-card textarea {
+    margin-bottom: 12px;
+    padding: 12px;
+    border: 1px solid #333;
+    border-radius: 10px;
+    background: #000;
+    color: #fff;
+    transition: 0.3s;
+}
+
+.edit-card input:hover,
+.edit-card textarea:hover {
+    border-color: #FCA311;
+}
+
+.edit-card button[type="submit"],
+#cancel-btn {
+    margin-top: 12px;
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.edit-card button[type="submit"] {
+    background: #FCA311;
+    color: #000;
+}
+
+.edit-card button[type="submit"]:hover {
+    background: #e69500;
+    color: #fff;
+    transform: scale(1.05);
+}
+
+#cancel-btn {
+    background: #333;
+    color: #fff;
+}
+
+#cancel-btn:hover {
+    background: #FCA311;
+    color: #000;
+    transform: scale(1.05);
+}
+
+/* Footer */
+.footer {
+    background: #000;
+    color: #fff;
+    padding: 40px 20px;
+    text-align: center;
+    margin-top: 60px;
+    border-top: 1px solid #333;
+}

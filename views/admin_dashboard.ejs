@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Admin Dashboard - Service Center</title>
+    <link rel="stylesheet" href="/css/admin_dashboard.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+</head>
+
+<body>
+    <nav>
+        <div class="website-name">Turbo<span style="color:#FCA311;">Care</span></div>
+        <div class="nav-links">
+            <a href="/admin/dashboard">📊 Dashboard</a>
+            <a href="/profiles">📋 Manage Users & Bookings</a>
+            <button class="login" id="logoutBtn">Logout</button>
+        </div>
+    </nav>
+
+    <main>
+        <h1>📊 Admin Dashboard</h1>
+
+        <!-- Summary cards -->
+        <div class="summary">
+            <div class="card">
+                <div>Total Bookings</div>
+                <h2>
+                    <%= summary.totalBookings %>
+                </h2>
+            </div>
+            <div class="card">
+                <div>Total Users</div>
+                <h2>
+                    <%= summary.totalUsers %>
+                </h2>
+            </div>
+            <div class="card">
+                <div>Total Revenue (₹)</div>
+                <h2>
+                    <%= summary.totalRevenue %>
+                </h2>
+            </div>
+        </div>
+
+        <!-- Charts (2x2 matrix) -->
+        <div class="charts">
+            <div class="chart-container">
+                <h2>Users Growth (by month)</h2>
+                <canvas id="usersChart" data-users='<%- JSON.stringify(chartData.users) %>'></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2>Bookings by Status</h2>
+                <canvas id="bookingsChart" data-bookings='<%- JSON.stringify(chartData.bookings) %>'></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2>Monthly Revenue</h2>
+                <canvas id="revenueChart" data-revenue='<%- JSON.stringify(chartData.revenue) %>'></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2>Top Recommended Services</h2>
+                <canvas id="servicesChart" data-services='<%- JSON.stringify(chartData.services) %>'></canvas>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Parse datasets
+        const usersData = JSON.parse(document.getElementById("usersChart").dataset.users || "[]");
+        const bookingsData = JSON.parse(document.getElementById("bookingsChart").dataset.bookings || "[]");
+        const revenueData = JSON.parse(document.getElementById("revenueChart").dataset.revenue || "[]");
+        const servicesData = JSON.parse(document.getElementById("servicesChart").dataset.services || "[]");
+
+        // Users Growth (line chart with bright dots)
+        const ctxUsers = document.getElementById("usersChart").getContext("2d");
+        const gradient = ctxUsers.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, "rgba(252,163,17,0.4)");
+        gradient.addColorStop(1, "rgba(252,163,17,0)");
+
+        new Chart(ctxUsers, {
+            type: "line",
+            data: {
+                labels: usersData.map(u => u.month),
+                datasets: [{
+                    label: "Users Registered",
+                    data: usersData.map(u => u.count),
+                    borderColor: "#FCA311",
+                    backgroundColor: gradient,
+                    borderWidth: 2.5,
+                    fill: true,
+                    tension: 0.35,
+                    pointRadius: 6,            // visible dots
+                    pointBackgroundColor: "#FCA311",
+                    pointBorderColor: "#fff",
+                    pointHoverRadius: 8,       // bigger on hover
+                    pointHoverBackgroundColor: "#fff",
+                    pointHoverBorderColor: "#FCA311",
+                    pointHoverBorderWidth: 2,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: "#111",
+                        borderColor: "#FCA311",
+                        borderWidth: 1,
+                        titleColor: "#FCA311",
+                        bodyColor: "#fff",
+                        callbacks: {
+                            label: (ctx) => ` ${ctx.formattedValue} users`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: "#bbb" }
+                    },
+                    y: {
+                        grid: { color: "rgba(255,255,255,0.05)" },
+                        ticks: { color: "#bbb" },
+                        beginAtZero: true
+                    }
+                },
+                animation: {
+                    duration: 1500,
+                    easing: "easeOutQuart"
+                }
+            }
+        });
+
+        // Bookings by Status (Doughnut with % inside)
+        new Chart(document.getElementById("bookingsChart"), {
+            type: "doughnut",
+            data: {
+                labels: bookingsData.map(b => b.status),
+                datasets: [{
+                    data: bookingsData.map(b => b.count),
+                    backgroundColor: ["#FCA311", "#2196F3", "#4CAF50", "#E63946", "#8D99AE"]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    datalabels: {
+                        color: "#fff",
+                        formatter: (value, ctx) => {
+                            let sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                            return ((value / sum) * 100).toFixed(1) + "%";
+                        }
+                    }
+                }
+            },
+            plugins: [ChartDataLabels]
+        });
+
+        // Monthly Revenue (Bar)
+        new Chart(document.getElementById("revenueChart"), {
+            type: "bar",
+            data: {
+                labels: revenueData.map(r => r.month),
+                datasets: [{
+                    label: "Revenue (₹)",
+                    data: revenueData.map(r => r.total),
+                    backgroundColor: "#14213D",
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { callbacks: { label: (ctx) => `₹${ctx.formattedValue}` } }
+                },
+                scales: {
+                    x: { ticks: { color: "#bbb" } },
+                    y: { ticks: { color: "#bbb" }, beginAtZero: true }
+                }
+            }
+        });
+
+        // Services Popularity (Pie with % inside)
+        new Chart(document.getElementById("servicesChart"), {
+            type: "pie",
+            data: {
+                labels: servicesData.map(s => s.service_name),
+                datasets: [{
+                    data: servicesData.map(s => s.count),
+                    backgroundColor: ["#FCA311", "#2A9D8F", "#E76F51", "#264653", "#8D99AE", "#E9C46A", "#9B5DE5"]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    datalabels: {
+                        color: "#fff",
+                        formatter: (value, ctx) => {
+                            let sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                            return ((value / sum) * 100).toFixed(1) + "%";
+                        }
+                    }
+                }
+            },
+            plugins: [ChartDataLabels]
+        });
+
+        // Logout via POST
+        document.getElementById("logoutBtn").addEventListener("click", async () => {
+            try {
+                const res = await fetch('/logout', { method: 'POST' });
+                if (res.ok) window.location = '/';
+            } catch (e) {
+                console.error(e);
+                window.location = '/';
+            }
+        });
+    </script>
+</body>
+
+</html>

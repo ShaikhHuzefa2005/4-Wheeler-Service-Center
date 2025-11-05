@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>TurboCare Receipt</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #0a0a0a;
+      margin: 0;
+      padding: 40px;
+      color: #eaeaea;
+    }
+
+    .receipt-box {
+      max-width: 780px;
+      margin: auto;
+      background: rgba(20, 20, 20, 0.95);
+      padding: 35px 40px;
+      border-radius: 14px;
+      box-shadow: 0 8px 25px rgba(252, 163, 17, 0.3);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(252, 163, 17, 0.2);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(135deg, #FCA311, #ff7b00);
+      padding: 18px 20px;
+      border-radius: 12px;
+      color: #111;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: 1px;
+      font-weight: 700;
+    }
+
+    .header img {
+      height: 55px;
+    }
+
+    .id {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #222;
+    }
+
+    h2 {
+      color: #FCA311;
+      margin-bottom: 10px;
+      font-size: 18px;
+      border-left: 4px solid #FCA311;
+      padding-left: 10px;
+    }
+
+    .details {
+      margin-bottom: 25px;
+      line-height: 1.6;
+      font-size: 15px;
+      background: #141414;
+      padding: 15px 18px;
+      border-radius: 10px;
+      border: 1px solid #222;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin: 15px 0;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    th,
+    td {
+      padding: 14px;
+      font-size: 15px;
+    }
+
+    th {
+      background: linear-gradient(135deg, #FCA311, #ff7b00);
+      color: #111;
+      font-weight: 600;
+      text-align: left;
+    }
+
+    td {
+      background: #1a1a1a;
+      border-bottom: 1px solid #2a2a2a;
+    }
+
+    tr:nth-child(even) td {
+      background: #222;
+    }
+
+    .totals td {
+      font-weight: bold;
+      background: #2a2a2a !important;
+      color: #FCA311;
+      text-align: right;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 14px;
+      color: #aaa;
+      margin-top: 35px;
+      border-top: 1px solid #2a2a2a;
+      padding-top: 15px;
+    }
+
+    .footer strong {
+      color: #FCA311;
+    }
+
+    a {
+      color: #FCA311;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="receipt-box">
+    <!-- Header -->
+    <div class="header">
+      <div>
+        <h1>TurboCare</h1>
+        <p class="id">Receipt ID: <%= booking.booking_number %>
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Customer -->
+    <div class="details">
+      <h2>Customer Information</h2>
+      <p><strong>Name:</strong>
+        <%= booking.name %>
+      </p>
+      <p><strong>Email:</strong>
+        <%= booking.email %>
+      </p>
+      <p><strong>Phone:</strong>
+        <%= booking.phone %>
+      </p>
+      <p><strong>Address:</strong>
+        <%= booking.address || "N/A" %>
+      </p>
+    </div>
+
+    <!-- Booking -->
+    <div class="details">
+      <h2>Booking Details</h2>
+      <p><strong>Booking Number:</strong>
+        <%= booking.booking_number %>
+      </p>
+      <p><strong>Date:</strong>
+        <%= booking.booking_date.toISOString().split("T")[0] %>
+      </p>
+      <p><strong>Status:</strong>
+        <%= booking.status %>
+      </p>
+      <p><strong>Payment:</strong>
+        <%= booking.payment_status %>
+      </p>
+    </div>
+
+    <!-- Car -->
+    <div class="details">
+      <h2>Car Information</h2>
+      <p><strong>Car Name:</strong>
+        <%= booking.car_name %>
+      </p>
+      <p><strong>Year:</strong>
+        <%= booking.year %>
+      </p>
+      <p><strong>Vehicle Number:</strong>
+        <%= booking.vehicle_number %>
+      </p>
+    </div>
+
+    <!-- Services -->
+    <h2>Services Availed</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Service</th>
+          <th>Price (₹)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (services.length> 0) { %>
+          <% services.forEach(service=> { %>
+            <tr>
+              <td>
+                <%= service.name %>
+              </td>
+              <td>₹<%= service.price %>
+              </td>
+            </tr>
+            <% }); %>
+              <% } else { %>
+                <tr>
+                  <td colspan="2">No services selected</td>
+                </tr>
+                <% } %>
+      </tbody>
+    </table>
+
+    <!-- Pickup/Drop Location -->
+    <div class="details">
+      <h2>Pickup/Drop Location</h2>
+      <% if (bookingLocation) { %>
+        <p><strong>City:</strong>
+          <%= bookingLocation.city %>
+        </p>
+        <p><strong>Location:</strong>
+          <%= bookingLocation.name %>
+        </p>
+        <p><strong>Coordinates:</strong>
+          <%= bookingLocation.lat %>, <%= bookingLocation.lng %>
+        </p>
+        <% } else { %>
+          <p>No pickup/drop location selected.</p>
+          <% } %>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>Thank you for choosing <strong>TurboCare</strong> 🚗✨</p>
+      <p>For support, contact <a href="mailto:support@turbocare.com">support@turbocare.com</a></p>
+    </div>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Service - TurboCare</title>
+    <link rel="stylesheet" href="/css/book_service.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav>
+        <p class="website-name"><span>Turbo</span>
+            <fill>Care</fill>
+        </p>
+        <div class="nav-buttons">
+            <button onclick="window.location.href='/'">Home</button>
+            <button onclick="window.location.href='/view_booking'">My Bookings</button>
+            <button onclick="window.location.href='/user_profile'">Profile</button>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <!-- Booking Form -->
+    <div class="form-container">
+        <h1>Book a Service</h1>
+        <form action="/book_service" method="POST" enctype="multipart/form-data" id="bookingForm">
+            <!-- Basic Info -->
+            <label>Car Model</label>
+            <input type="text" name="car_model" required>
+
+            <label>Year</label>
+            <input type="number" name="year" min="1990" max="2025" required>
+
+            <label>Vehicle Number</label>
+            <input type="text" name="vehicle_number" required>
+
+            <!-- Pickup & Drop -->
+            <label for="pickup_drop">Pickup & Drop?</label>
+            <select name="pickup_drop" id="pickup_drop" required>
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+
+            <!-- Display Selected Location -->
+            <% if (session.selectedLocation) { %>
+                <div id="selected-location">
+                    <label>Selected Location</label>
+                    <p>
+                        <%= session.selectedLocation.name %>
+                            (Lat: <%= session.selectedLocation.lat %>, Lng: <%= session.selectedLocation.lng %>)
+                    </p>
+                </div>
+                <% } %>
+
+                    <!-- Select Location Button -->
+                    <button type="button" id="select_location_btn" style="display:none; margin-top:10px;"
+                        onclick="window.location.href='/index'">
+                        Select Location
+                    </button>
+
+                    <!-- Hidden input to store location id -->
+                    <input type="hidden" name="location_id" id="location_id"
+                        value="<%= session.selectedLocation ? session.selectedLocation.id : '' %>">
+
+                    <label>Additional Notes</label>
+                    <textarea name="extra_notes" placeholder="Describe any extra problems..."></textarea>
+
+                    <h2>Problem-Specific Photos</h2>
+
+                    <!-- Exterior -->
+                    <h3>1. Exterior issues (dents, scratches, rust)</h3>
+                    <p>Upload close-up and wide shots</p>
+                    <input type="file" name="exterior_photos[]" multiple accept="image/*">
+
+                    <!-- Engine -->
+                    <h3>2. Engine problems</h3>
+                    <p>Upload engine bay photos & close-ups</p>
+                    <input type="file" name="engine_photos[]" multiple accept="image/*">
+
+                    <!-- Tire -->
+                    <h3>3. Tire & wheel issues</h3>
+                    <p>Upload full shots & close-ups of tread wear</p>
+                    <input type="file" name="tire_photos[]" multiple accept="image/*">
+
+                    <!-- Brake -->
+                    <h3>4. Brake issues (if visible)</h3>
+                    <p>Upload close-up of brake discs or pads</p>
+                    <input type="file" name="brake_photos[]" multiple accept="image/*">
+
+                    <!-- Interior -->
+                    <h3>5. Interior issues</h3>
+                    <p>Upload photos of seats, dashboard, or controls</p>
+                    <input type="file" name="interior_photos[]" multiple accept="image/*">
+
+                    <!-- Underbody -->
+                    <h3>6. Underbody issues</h3>
+                    <p>Upload photos of leaks, hanging parts (use flashlight if needed)</p>
+                    <input type="file" name="underbody_photos[]" multiple accept="image/*">
+
+                    <!-- Video -->
+                    <h3>Video (for sound/smell issues)</h3>
+                    <p>If problem isn’t visible, upload short video/audio</p>
+                    <input type="file" name="problem_video" accept="video/*,audio/*">
+
+                    <!-- Instructions -->
+                    <div class="instructions">
+                        <strong>Tips:</strong>
+                        <ul>
+                            <li>Take photos in good lighting (daytime is best).</li>
+                            <li>Upload both close-up and wide-angle shots.</li>
+                            <li>If it’s a sound/smell issue → send a short video/audio.</li>
+                            <li>For modifications contact us at +91 7499668764 or manthanthereda588@gmail.com</li>
+                        </ul>
+                    </div>
+
+                    <button type="submit">Submit Booking</button>
+        </form>
+    </div>
+
+    <script src="/js/session_check.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        // Ask server if user session is valid
+        socket.emit("checkLogin");
+
+        // If not logged in → redirect
+        socket.on("redirect", (url) => {
+            window.location.href = url;
+        });
+
+        function logout() {
+            fetch('/logout', { method: 'POST' })
+                .then(() => window.location.href = '/');
+        }
+
+        const pickupDrop = document.getElementById("pickup_drop");
+        const selectBtn = document.getElementById("select_location_btn");
+        const bookingForm = document.getElementById("bookingForm");
+        const locationInput = document.getElementById("location_id");
+
+        // Show/Hide location button based on pickup_drop and session data
+        function updateLocationButton() {
+            if (pickupDrop.value === "1") {
+                selectBtn.style.display = "inline-block";
+            } else {
+                selectBtn.style.display = "none";
+                locationInput.value = ""; // Clear if user changes to No
+            }
+        }
+
+        // Initialize button visibility
+        updateLocationButton();
+
+        // Update on change
+        pickupDrop.addEventListener("change", updateLocationButton);
+
+        // Prevent submit if location not chosen when pickup_drop is Yes
+        bookingForm.addEventListener("submit", function (e) {
+            if (pickupDrop.value === "1" && locationInput.value === "") {
+                e.preventDefault();
+                alert("Please select a location before submitting");
+            }
+        });
+    </script>
+</body>
+
+</html>

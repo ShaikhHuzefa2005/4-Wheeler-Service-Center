@@ -1,0 +1,177 @@
+/* ================= NAVBAR ================= */
+.navbar {
+    background: #111827;
+    color: white;
+    padding: 15px 30px;
+}
+
+.navbar .logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.navbar .logo span {
+    color: #facc15;
+}
+
+/* ================= GENERAL ================= */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f7fb;
+    color: #333;
+}
+
+h2,
+h3,
+h4 {
+    margin: 8px 0;
+}
+
+/* ================= PROFILE SECTION ================= */
+.profile-container {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    flex-wrap: wrap;
+}
+
+.profile-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    width: 280px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-card img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+
+/* ================= BOOKINGS ================= */
+.bookings-container {
+    flex: 1;
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.booking-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    background: #fafafa;
+}
+
+.booking-card h3 {
+    color: #1f2937;
+}
+
+.media-gallery {
+    margin-top: 10px;
+}
+
+.media-gallery h4 {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #374151;
+}
+
+.media-gallery img {
+    width: 120px;
+    height: 90px;
+    object-fit: cover;
+    margin: 5px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.media-gallery video {
+    width: 250px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+/* ================= STATUS DROPDOWN ================= */
+.status-form {
+    margin-top: 12px;
+}
+
+.status-form select {
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.status-form button {
+    padding: 8px 14px;
+    margin-left: 8px;
+    border-radius: 6px;
+    border: none;
+    background: #2563eb;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.status-form button:hover {
+    background: #1d4ed8;
+}
+
+/* ================= RECOMMENDATION FORM INSIDE BOOKING CARD ================= */
+.booking-card .recommend-container {
+    margin-top: 15px;
+    padding: 12px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e5e7eb;
+}
+
+.booking-card .recommend-container h4 {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #111827;
+}
+
+.booking-card .recommend-container form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.booking-card .recommend-container div {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+}
+
+.booking-card .recommend-container input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+}
+
+.booking-card .recommend-container button {
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: none;
+    background: #2563eb;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 8px;
+}
+
+.booking-card .recommend-container button:hover {
+    background: #1d4ed8;
+}

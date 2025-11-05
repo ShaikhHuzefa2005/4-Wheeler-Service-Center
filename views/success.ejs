@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Transaction Successful</title>
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+      /* black background */
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color: #2ecc71;
+      /* green text color */
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .tick-wrapper {
+      width: clamp(120px, 25vmin, 220px);
+      height: auto;
+      position: absolute;
+      animation: fadeOut 0.8s ease forwards;
+      animation-delay: 1.2s;
+      /* fade out after drawing */
+    }
+
+    .logo-wrapper {
+      width: clamp(120px, 25vmin, 220px);
+      height: auto;
+      margin-bottom: 20px;
+      position: relative;
+      filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.6));
+      opacity: 0;
+      transform: scale(0.8);
+      animation: showLogo 0.8s ease-out forwards;
+      animation-delay: 2s;
+      /* after tick fades */
+    }
+
+    .message {
+      font-size: 2rem;
+      font-weight: bold;
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: showText 0.8s ease-out forwards;
+      animation-delay: 2.8s;
+      /* after logo appears */
+    }
+
+    /* Tick animation */
+    .tick-line {
+      stroke: #2ecc71;
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      stroke-dasharray: 50;
+      stroke-dashoffset: 50;
+      animation: draw 1.2s forwards ease-in-out;
+    }
+
+    @keyframes draw {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+      }
+    }
+
+    @keyframes showLogo {
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes showText {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="tick-wrapper">
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" fill="none" width="100%" height="100%">
+      <!-- Tick mark -->
+      <path class="tick-line" d="M18 34 L28 46 L46 22" />
+    </svg>
+  </div>
+
+  <div class="logo-wrapper">
+    <!-- Placeholder form logo -->
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" fill="#2ecc71">
+      <rect x="12" y="8" width="40" height="48" rx="4" ry="4" stroke="#2ecc71" stroke-width="3" fill="none" />
+      <line x1="20" y1="20" x2="44" y2="20" stroke="#2ecc71" stroke-width="3" />
+      <line x1="20" y1="30" x2="44" y2="30" stroke="#2ecc71" stroke-width="3" />
+      <line x1="20" y1="40" x2="36" y2="40" stroke="#2ecc71" stroke-width="3" />
+    </svg>
+  </div>
+
+  <div class="message">Transaction successful</div>
+  <script>
+
+    setTimeout(() => {
+      window.location.href = "/user_profile";
+    }, 5000); 
+  </script>
+</body>
+
+</html>
